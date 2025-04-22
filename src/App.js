@@ -22,22 +22,21 @@ function App() {
   });
 
   const [completedTasks, setCompletedTasks] = useState(() => {
-  const stored = localStorage.getItem("completedTasks");
-  return stored ? JSON.parse(stored) : [];
-});
+    const stored = localStorage.getItem("completedTasks");
+    return stored ? JSON.parse(stored) : [];
+  });
 
-useEffect(() => {
-  localStorage.setItem("completedTasks", JSON.stringify(completedTasks));
-}, [completedTasks]);
+  useEffect(() => {
+    localStorage.setItem("completedTasks", JSON.stringify(completedTasks));
+  }, [completedTasks]);
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
-  
+
   useEffect(() => {
     localStorage.setItem("deletedTasks", JSON.stringify(deletedTasks));
   }, [deletedTasks]);
-  
 
   const handleDelete = (indexToDelete) => {
     const deletedTask = tasks[indexToDelete];
@@ -58,14 +57,20 @@ useEffect(() => {
     setDeletedTasks(updatedDeleted);
   };
 
+  const handleRemoveComp = (indexToRemove) => {
+    const updatedCompleted = completedTasks.filter((_, i) => i !== indexToRemove);
+    setCompletedTasks(updatedCompleted);
+  };
+
   const handleComplete = (indexToComplete) => {
     const completedTask = tasks[indexToComplete];
-    tasks.filter((_, index) => index !== indexToComplete);
+    const updatedTasks = tasks.filter((_, index) => index !== indexToComplete);
+    setTasks(updatedTasks);
     setCompletedTasks([...completedTasks, completedTask]);
   };
 
   return (
-    <Router>
+    <Router basename="/react-to-do-list">
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -85,7 +90,9 @@ useEffect(() => {
         />
         <Route
           path="/complete"
-          element={<Complete completeTasks={completedTasks} />}
+          element={
+            <Complete completeTasks={completedTasks} removeBtn={handleRemoveComp} />
+          }
         />
         <Route
           path="/delete"

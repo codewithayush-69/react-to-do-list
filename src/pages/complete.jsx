@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-function DeletePage({ completeTasks}) {
+function DeletePage({ completeTasks, removeBtn }) {
   return (
     <div className="container my-5 min-vh-100">
       <h2 className="text-center mb-4">Complete Task</h2>
@@ -15,6 +15,12 @@ function DeletePage({ completeTasks}) {
               <p>{task.taskDescription}</p>
               <p>Priority: {task.priority}</p>
               <p>Due Date: {task.dueDate}</p>
+              <button
+                className="btn btn-danger"
+                onClick={() => removeBtn(index)}
+              >
+                Remove
+              </button>
             </li>
           ))}
         </ul>
